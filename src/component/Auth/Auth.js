@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import {connect} from 'react-redux'
+import {updateUsername, updateProfile, updateUserId, updateUser} from '../../ducks/reducer'
 
 class Auth extends Component {
     constructor(){
@@ -28,10 +30,16 @@ class Auth extends Component {
     }
 
     async login(){
-        let res = await axios.post('/api/auth/register', {
+        let res = await axios.post('/api/auth/login', {
             username: this.state.username,
             password: this.state.password
         })
+        this.props.updateUser()
+        this.props.updateUsername()
+        this.props.updateProfile()
+        this.props.updateUserId()
+        console.log(this.props)
+        console.log(this.props.username)
         this.props.history.push('/dashboard')
     }
 
@@ -40,7 +48,13 @@ class Auth extends Component {
             username: this.state.username,
             password: this.state.password
         })
-        this.props.history.push('/dashboard')
+        this.props.updateUser()
+        this.props.updateUsername()
+        this.props.updateProfile()
+        this.props.updateUserId()
+        console.log(this.props)
+        console.log(this.props.username)
+        //this.props.history.push('/dashboard')
     }
  
 
@@ -53,11 +67,27 @@ class Auth extends Component {
                 Password:
                 <input type='text' onChange={event => this.handlePassword(event.target.value)}/>
 
-                <button onClick={() => this.login()} type='button'>Login</button>
+                <button onClick={() => {
+                    this.login() 
+                    this.props.updateUser()
+
+                }
+                    } type='button'>Login</button>
                 <button onClick={() => this.register()} type='button'>Register</button>
             </div>
         )
     }
 }
 
-export default Auth
+function mapStateToProps(state){
+    return state
+}
+
+let mapDispatchToProps = {
+    updateUsername,
+    updateProfile,
+    updateUserId,
+    updateUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth)

@@ -19,15 +19,17 @@ console.log('Connected to the db')})
 
 // // middleware
 app.use(express.json())         //bodyparser
-// app.use(session({
-//     secret: SECRET,
-//     resave: false,
-//     saveUnitialized: false
-// }))
+app.use(session({
+    secret: SECRET,
+    resave: false,
+    saveUnitialized: false
+}))
+app.use( express.static( __dirname + '../../public' ) );
 
 // endpoints
 app.post('/api/auth/register', ctrl.register)
 app.post('/api/auth/login', ctrl.login)
+app.get('/api/posts/:userid', ctrl.getAllPosts)
 
 // listen on port
 app.listen(SERVER_PORT, () => console.log(`Server listening on port: ${SERVER_PORT}`))
